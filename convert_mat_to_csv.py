@@ -1,13 +1,18 @@
 import sys
-import os
 import csv
 import numpy as np
 import scipy.io as sio
+import random
 
 mat_file = sys.argv[1]
 csv_file = sys.argv[2]
+if len(sys.argv) > 3:
+  percent_validation = float(sys.argv[3])
+  print("PERCENT Validation: ", percent_validation * 100)
+else:
+  percent_validation = 0.8
 
-with open(csv_file, 'wb') as csvfile:
+with open(csv_file, 'w') as csvfile:
 
   mat = sio.loadmat(mat_file)
 
@@ -15,7 +20,7 @@ with open(csv_file, 'wb') as csvfile:
   csvwriter.writerow(['relative_im_path','class','bbox_x1','bbox_y1','bbox_x2','bbox_y2','test'])
 
   for annotation in mat['annotations'][0]:
-    test = np.squeeze(annotation['test'])
+    test = "1" if random.random() > percent_validation else "0"
     im_path = str(np.squeeze(annotation['relative_im_path']))
     cls = np.squeeze(annotation['class'])
     x1 = np.squeeze(annotation['bbox_x1'])

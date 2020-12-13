@@ -7,13 +7,8 @@ Example usage:
     --model frozen_inference_graph.pb
 """
 import os
-import random
 import sys
-import six.moves.urllib as urllib
-import tarfile
-import zipfile
 
-from io import StringIO
 from PIL import Image
 
 import numpy as np

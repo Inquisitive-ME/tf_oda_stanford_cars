@@ -18,14 +18,9 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-import hashlib
 import io
-import logging
 import csv
-
 import PIL.Image
-
-import numpy as np
 
 import tensorflow as tf
 
@@ -87,13 +82,14 @@ def dict_to_tf_example(annotation, dataset_directory, label_map_dict):
   classes_text = []
 
   label=''
-  for name, val in label_map_dict.iteritems():
+  for name, val in label_map_dict.items():
     if val == cls: 
       label = name
       break
 
   classes_text.append(label.encode('utf8'))
   classes.append(label_map_dict[label])
+  image_format = b'jpg'
   
   example = tf.train.Example(features=tf.train.Features(feature={
 	'image/height': dataset_util.int64_feature(height),
@@ -101,7 +97,7 @@ def dict_to_tf_example(annotation, dataset_directory, label_map_dict):
 	'image/filename': dataset_util.bytes_feature(full_img_path.encode('utf8')),
 	'image/source_id': dataset_util.bytes_feature(full_img_path.encode('utf8')),
 	'image/encoded': dataset_util.bytes_feature(encoded_jpg),
-	'image/format': dataset_util.bytes_feature('jpeg'.encode('utf8')),
+	'image/format': dataset_util.bytes_feature(image_format),
 	'image/object/bbox/xmin': dataset_util.float_list_feature(xmin),
 	'image/object/bbox/xmax': dataset_util.float_list_feature(xmax),
 	'image/object/bbox/ymin': dataset_util.float_list_feature(ymin),
